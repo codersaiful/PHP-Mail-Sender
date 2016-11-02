@@ -12,7 +12,11 @@ $message = <<<EOR
 EOR;
 $mail->setMessage($message);
 $mail->setSubject('My PHP Class Test Mail');
+$mail->setSuccessMessage("Your mail has been sent");
 //$mail->getHeader();
-$mail->SendEmail();
+if(!$mail->SendEmail()){
+    echo '<h1>FAILED: unable to Success</h1>';
+    //We can redirect here, for Unable to send Mail
+}
 var_dump($mail->getHeader());
 var_dump($mail);
