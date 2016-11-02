@@ -12,6 +12,9 @@ class MailSender{
 	private $subject_error = 'Subject Not Set. Class->setSubject()';
 	private $from_email_error = 'From email Not. Set Class->setFrom()';
 	private $message_error = 'Email Message Body Not Set. Class->setMessage()';
+        private $mail_success_message = 'Mail has been sent Succefully.';
+        private $mail_fail_message = 'Sorry, Unable to send Message!!';
+        
 	
 
 
@@ -85,6 +88,12 @@ class MailSender{
             return $this->headers;
         }
         
+        public function setSuccessMessage($success_message = false) {
+            if($success_message){
+                $this->mail_success_message = $success_message;
+            }
+        }
+        
         
         public function SendEmail() {
             $this->setHeader();
@@ -93,7 +102,6 @@ class MailSender{
             $subject = (!empty($this->subject) ? $this->subject : $errors[] = $this->subject_error);
             $message = (!empty($this->message) ? $this->message : $errors[] = $this->message_error);
             $header = $this->headers;
-            var_dump($header);
             if($errors){
                 echo '<b>Error Found</b><br><pre>';
                 foreach($errors as $error){
@@ -101,8 +109,14 @@ class MailSender{
                 }
                 echo '</pre>';
             }else{
-                echo '<h2>Mail Function Run now properly</h2>';
-                //mail($to, $subject, $message, $header);
+                $confirm_mail_send = mail($to, $subject, $message, $header);
+                if(!$confirm_mail_send){
+                    echo $this->mail_fail_message;
+                    return FALSE;
+                }else{
+                    echo $this->mail_success_message;
+                    return TRUE;
+                }
             }
             
             
